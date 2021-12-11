@@ -1,0 +1,23 @@
+{
+  "name": "blue_med_backend",
+  "version": "1.0.0",
+  "description": "backend for blue med app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewilf/blue_med_backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrewilf/blue_med_backend/issues"
+  },
+  "homepage": "https://github.com/andrewilf/blue_med_backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
