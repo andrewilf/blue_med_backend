@@ -9,11 +9,11 @@ router.get("/", async (req, res) => {
   res.send(PatientAll);
 });
 
-router.post("/", async (req, res) => {
-    const PatientAll = await Patient.create({
+// router.post("/", async (req, res) => {
+//     const PatientAll = await Patient.create({
 
-    });
-    //console.log(allScientists)
-    res.send(PatientAll);
-  });
+//     });
+//     //console.log(allScientists)
+//     res.send(PatientAll);
+//   });
 module.exports = router;

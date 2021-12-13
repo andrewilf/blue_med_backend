@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const PatientSchema = new Schema(
   {
-    nric: {
+    NRIC: {
       //required to id the patient
       type: String,
       required: true,
@@ -50,7 +50,7 @@ const PatientSchema = new Schema(
     dependents: [
       //mainly for Paediatrics
       {
-        nric: {
+        NRIC: {
           type: String,
           required: true,
         },

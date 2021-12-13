@@ -3,45 +3,40 @@ const Schema = mongoose.Schema;
 
 const SchAppSchema = new Schema(
   {
-    //     name: {
-    //       type: String,
-    //       required: true,
-    //     },
-    //     profession: {
-    //       type: String,
-    //       requird: true,
-    //     },
-    //     languages: [
-    //       //spoken languages
-    //       {
-    //         type: String,
-    //         required: true,
-    //       },
-    //     ],
-    //     bio: {
-    //       //blurb of doctor
-    //       type: String,
-    //     },
-    //     pricing: {
-    //       //rate per session, potentially could be changed to array for multiple rates
-    //       type: Number,
-    //       required: true,
-    //     },
-    //     email: {
-    //       type: String,
-    //       requird: true,
-    //     },
-    //     password: {
-    //       type: String,
-    //       required: true,
-    //     },
-    //     gender: {
-    //       type: String,
-    //       required: true,
-    //     },
-    //     img: {
-    //       type: String,
-    //     },
+    patient: {
+      //patient _id from patient collection
+      ttype: Schema.Types.ObjectId,
+      ref: "Patient",
+      required: true,
+    },
+    dependentNRIC: {
+      //optional field. if appointment is for a dependent, their NRIC number is here, if not field is blank
+      type: String,
+    },
+    doctor: {
+      //doctor _id from patient collection
+      type: Schema.Types.ObjectId,
+      ref: "Doctor",
+      required: true,
+    },
+    type: {
+      //type of appointment: GP, Mental Wellness, or Paediatrics
+      type: String,
+      required: true,
+    },
+    patientNotes: {
+      //optional notes patient can give for reason of appointment
+      type: String,
+    },
+    zoomLink: {
+      type: String,
+      required: true,
+    },
+    appTime: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,

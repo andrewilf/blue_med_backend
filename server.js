@@ -1,6 +1,4 @@
 const express = require("express");
-const Patient = require("./models/patient");
-const Doctor = require("./models/doctor");
 require("dotenv").config();
 
 const app = express();
@@ -13,6 +11,8 @@ const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 const MONGO_BASE_URL = process.env.MONGO_BASE_URL;
 const MONGO_URL = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_BASE_URL}/${DATABASE}?retryWrites=true&w=majority`;
 
+//--------------------------------------------controllers--------------------------------------------
+
 const patientController = require("./controllers/patientController");
 const doctorController = require("./controllers/doctorController");
 const scheduledAppointmentController = require("./controllers/schAppController");
@@ -23,11 +23,13 @@ app.use('/doctor', doctorController);
 app.use('/schapp', scheduledAppointmentController);
 app.use('/pastapp', pastAppointmentController);
 
-//-------------------API------------------------
-
 mongoose.connect(MONGO_URL).then(async () => {
   console.log("database connected");
   app.listen(PORT, () => {
     console.log("listening on", PORT);
   });
 });
+
+db.on("error", (err) => console.log(err.message + " is Mongod not running?"));
+db.on("connected", () => console.log("mongo connected"));
+db.on("disconnected", () => console.log("mongo disconnected"));
