@@ -14,7 +14,14 @@ const MONGO_BASE_URL = process.env.MONGO_BASE_URL;
 const MONGO_URL = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_BASE_URL}/${DATABASE}?retryWrites=true&w=majority`;
 
 const patientController = require("./controllers/patientController");
+const doctorController = require("./controllers/doctorController");
+const scheduledAppointmentController = require("./controllers/schAppController");
+const pastAppointmentController = require("./controllers/pastAppController");
+
 app.use('/patient', patientController);
+app.use('/doctor', doctorController);
+app.use('/schapp', scheduledAppointmentController);
+app.use('/pastapp', pastAppointmentController);
 
 //-------------------API------------------------
 
