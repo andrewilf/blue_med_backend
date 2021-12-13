@@ -2,46 +2,67 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const PastAppSchema = new Schema(
+  //After appointment with doctor, scheduled appointment is removed and a corresponding past appointment entry is made
   {
-    // name: {
-    //   type: String,
-    //   required: true,
-    // },
-    // profession: {
-    //   type: String,
-    //   requird: true,
-    // },
-    // languages: [
-    //   //spoken languages
-    //   {
-    //     type: String,
-    //     required: true,
-    //   },
-    // ],
-    // bio: {
-    //   //blurb of doctor
-    //   type: String,
-    // },
-    // pricing: {
-    //   //rate per session, potentially could be changed to array for multiple rates
-    //   type: Number,
-    //   required: true,
-    // },
-    // email: {
-    //   type: String,
-    //   requird: true,
-    // },
-    // password: {
-    //   type: String,
-    //   required: true,
-    // },
-    // gender: {
-    //   type: String,
-    //   required: true,
-    // },
-    // img: {
-    //   type: String,
-    // },
+    patient: {
+      //patient _id from patient collection
+      type: Schema.Types.ObjectId,
+      ref: "Patient",
+      required: true,
+    },
+    dependentNRIC: {
+      //optional field. if appointment is for a dependent, their NRIC number is here, if not field is blank
+      type: String,
+    },
+    doctor: {
+      //doctor _id from doctor collection
+      type: Schema.Types.ObjectId,
+      ref: "Doctor",
+      required: true,
+    },
+    type: {
+      //type of appointment: GP, Mental Wellness, or Paediatrics
+      type: String,
+      required: true,
+    },
+    patientNotes: {
+      //optional notes patient can give for reason of appointment
+      type: String,
+    },
+    doctorNotes: {
+      //optional notes doctor can enter after appointment. prescribed medication is listed here
+      type: String,
+    },
+    appTime: {
+      //time appointment started
+      type: Date,
+      required: true,
+    },
+    appTimeEnd: {
+      //time appointment ended
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+    cost: {
+      //total cost of appointment and medication, if any.
+      type: Number,
+      required: true,
+    },
+    paid: {
+      //boolean for if the appointment and medication, if any, has been paid for. True if paid, false if not paid yet
+      type: Boolean,
+      required: true,
+    },
+    medication: {
+      //status of medication: NA, pending, en route, delivered, missed delivery
+      type: String,
+      required: true,
+    },
+    altDeliveryAddress: {
+      //address medication is to be delivered to. Blank if address of patient is to be used
+      type: String,
+    },
   },
   {
     timestamps: true,

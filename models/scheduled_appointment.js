@@ -5,7 +5,7 @@ const SchAppSchema = new Schema(
   {
     patient: {
       //patient _id from patient collection
-      ttype: Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Patient",
       required: true,
     },
@@ -14,7 +14,7 @@ const SchAppSchema = new Schema(
       type: String,
     },
     doctor: {
-      //doctor _id from patient collection
+      //doctor _id from doctor collection
       type: Schema.Types.ObjectId,
       ref: "Doctor",
       required: true,
