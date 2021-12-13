@@ -14,6 +14,7 @@ const PatientSchema = new Schema(
       required: true,
     },
     email: {
+      //used for patient login
       type: String,
       required: true,
     },
@@ -63,6 +64,7 @@ const PatientSchema = new Schema(
           required: true,
         },
         DOB: {
+          //use format DD/MM/yyyy. type string as easy to parse to date format, saving as date will include timestamp
           type: String,
           required: true,
         },

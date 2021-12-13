@@ -28,6 +28,7 @@ const DoctorSchema = new Schema(
       required: true,
     },
     email: {
+      //used for doctor login
       type: String,
       requird: true,
     },
