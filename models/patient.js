@@ -32,6 +32,10 @@ const PatientSchema = new Schema(
       type: String,
       required: true,
     },
+    contactNumber: {
+      type: Number,
+      required: true,
+    },
     allergies: [
       {
         type: String,
@@ -70,10 +74,6 @@ const PatientSchema = new Schema(
         },
         address: {
           type: String,
-          required: true,
-        },
-        contactNumber: {
-          type: Number,
           required: true,
         },
         allergies: [

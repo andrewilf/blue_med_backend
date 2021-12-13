@@ -11,6 +11,9 @@ const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 const MONGO_BASE_URL = process.env.MONGO_BASE_URL;
 const MONGO_URL = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_BASE_URL}/${DATABASE}?retryWrites=true&w=majority`;
 
+//--------------------------------------------middleware--------------------------------------------
+app.use(express.json());
+
 //--------------------------------------------controllers--------------------------------------------
 
 const patientController = require("./controllers/patientController");
