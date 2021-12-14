@@ -54,7 +54,7 @@ const PastAppSchema = new Schema(
       type: Boolean,
       required: true,
     },
-    medication: {
+    medicationDelivery: {
       //status of medication: NA, pending, en route, delivered, missed delivery
       type: String,
       required: true,

@@ -39,6 +39,7 @@ const PatientSchema = new Schema(
     allergies: [
       {
         type: String,
+        required: true,
       },
     ],
     insuranceID: {
