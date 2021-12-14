@@ -1,6 +1,6 @@
 const express = require("express");
 require("dotenv").config();
-const pastAppointment = require("../models/past_Appointment");
+const pastAppointment = require("../models/past_appointment");
 const router = express.Router();
 
 // router.get("/", async (req, res) => {
