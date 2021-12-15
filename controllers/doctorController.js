@@ -9,7 +9,10 @@ router.get("/", async (req, res) => {
   res.send(doctorAll);
 });
 
+//GET routes==================================================================================================
+
 router.get("/:doctorID", async (req, res) => {
+  //searc for one doctor by _id
   try {
     const doctorID = req.params.doctorID;
     console.log("search for doctor by _id");
@@ -28,6 +31,7 @@ router.get("/:doctorID", async (req, res) => {
 });
 
 router.get("/:searchField/:searchValue", async (req, res) => {
+  //search multiple doctors by defined field
   try {
     const searchField = req.params.searchField;
     const searchValue = req.params.searchValue;
@@ -55,13 +59,68 @@ router.get("/:searchField/:searchValue", async (req, res) => {
   }
 });
 
+//maybe have routes to search if a session price should be greater than, less than, between
+
+// router.get("/priceGreater/:greaterThanValue", async (req, res) => {});
+
+// router.get("/priceLower/:lessThanValue", async (req, res) => {});
+
+// router.get("/priceBetween/:minValue/:maxValue", async (req, res) => {});
+
+//POST routes=================================================================================================
+
 router.post("/", async (req, res) => {
   try {
+    //create one doctor
     const doctorCreate = await Doctor.create(req.body);
     res.send(doctorCreate);
   } catch (error) {
     console.error(error);
     res.status(400).send("error when adding doctor, bad input");
+  }
+});
+
+router.post("/sample", async (req, res) => {
+  //create a sample doctor
+  const sampleData = {
+    name: "doctor girl",
+    profession: "paedeatrics",
+    languages: ["english", "hokkien"],
+    bio: "is also very good",
+    pricing: 101,
+    email: "email2@email.com",
+    password: "asd12dsa212a123",
+    gender: "female",
+    img: "fakeurl.com",
+  };
+  try {
+    const doctorCreate = await Doctor.create(sampleData);
+    res.send(doctorCreate);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when adding doctor, bad input");
+  }
+});
+
+//PUT routes==================================================================================================
+
+//DELETE routes===============================================================================================
+
+router.delete("/:doctorID", async (req, res) => {
+  //delete one doctor by _id
+  const doctorID = req.params.doctorID;
+  try {
+    const doctorDelete = await Doctor.deleteOne({ _id: doctorID });
+    if (doctorDelete.deletedCount !== 0) {
+      res.send(doctorDelete);
+    } else {
+      res
+        .status(404)
+        .send("No doctors were found with that id, deletedCount: 0");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when deleting doctor, bad input");
   }
 });
 
