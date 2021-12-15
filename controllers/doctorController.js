@@ -125,8 +125,18 @@ router.post("/sample", async (req, res) => {
 //PUT routes==================================================================================================
 
 router.put("/:doctorID", async (req, res) => {
-  const filter = { _id: req.params.doctorID };
+  //update one doctor by _id
+  const filterID = { _id: req.params.doctorID };
   const update = req.body;
+  try {
+    const doctorUpdated = await Doctor.findOneAndUpdate(filterID, update, {
+      new: true,
+    });
+    res.send(doctorUpdated);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when updating doctor, bad input");
+  }
 });
 
 //DELETE routes===============================================================================================
@@ -142,6 +152,21 @@ router.delete("/:doctorID", async (req, res) => {
       res
         .status(404)
         .send("No doctors were found with that id, deletedCount: 0");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when deleting doctor, bad input");
+  }
+});
+
+router.delete("/all", async (req, res) => {
+  //delete all doctors, use carefully
+  try {
+    const doctorsDelete = await Doctor.deleteMany({});
+    if (doctorsDelete.deletedCount !== 0) {
+      res.send(doctorsDelete);
+    } else {
+      res.status(404).send("No doctors were found in the db, deletedCount: 0");
     }
   } catch (error) {
     console.error(error);
