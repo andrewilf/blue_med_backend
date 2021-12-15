@@ -3,13 +3,32 @@ require("dotenv").config();
 const Doctor = require("../models/doctor");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+//GET routes==================================================================================================
+
+router.get("/all", async (req, res) => {
   console.log("get all doctors");
   const doctorAll = await Doctor.find({});
+  //returns all doctors, should be an array of objects
   res.send(doctorAll);
 });
 
-//GET routes==================================================================================================
+router.get("/", async (req, res) => {
+  //search multiple doctors by body
+  try {
+    console.log(`search by req.body object`);
+    const doctorsGet = await Doctor.find(req.body);
+    if (doctorsGet.length !== 0) {
+      //return valid response, should be an array of objects
+      res.send(doctorsGet);
+    } else {
+      //No doctor was found
+      res.status(404).send(`no doctors were found`);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("error when finding doctor");
+  }
+});
 
 router.get("/:doctorID", async (req, res) => {
   //searc for one doctor by _id
@@ -18,6 +37,7 @@ router.get("/:doctorID", async (req, res) => {
     console.log("search for doctor by _id");
     const doctorGetOne = await Doctor.findOne({ _id: doctorID });
     if (doctorGetOne !== null) {
+      //returns one object
       res.send(doctorGetOne);
     } else {
       //_id was of the correct format but no doctor was found
@@ -42,7 +62,7 @@ router.get("/:searchField/:searchValue", async (req, res) => {
     );
     const doctorsGet = await Doctor.find({ [searchField]: searchValue });
     if (doctorsGet.length !== 0 && checkFieldExists) {
-      //return valid response
+      //return valid response, should be an array of objects
       res.send(doctorsGet);
     } else if (!checkFieldExists) {
       //searchField is not valid
@@ -103,6 +123,11 @@ router.post("/sample", async (req, res) => {
 });
 
 //PUT routes==================================================================================================
+
+router.put("/:doctorID", async (req, res) => {
+  const filter = { _id: req.params.doctorID };
+  const update = req.body;
+});
 
 //DELETE routes===============================================================================================
 
