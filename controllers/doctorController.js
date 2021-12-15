@@ -129,15 +129,23 @@ router.put("/:doctorID", async (req, res) => {
   const filterID = { _id: req.params.doctorID };
   const update = req.body;
   try {
-    const doctorUpdated = await Doctor.findOneAndUpdate(filterID, update, {
-      new: true,
-    });
-    res.send(doctorUpdated);
+    const doctorFind = await Doctor.findOne(filterID);
+    if (doctorFind !== null) {
+      console.log("found the doctor", doctorFind);
+      const doctorUpdated = await Doctor.updateOne(filterID, update);
+      res.send(doctorUpdated);
+    } else {
+      //if doctor not found, send 404 status
+      res.status(404).send("No doctors were found with that _id");
+    }
   } catch (error) {
     console.error(error);
+    //likely the doctorID was not a string of 12 bytes or a string of 24 hex characters
     res.status(400).send("error when updating doctor, bad input");
   }
 });
+
+//maybe have an upsert put? Potentially could also have a mass update path if needed, searches by one field, updates according to req.body
 
 //DELETE routes===============================================================================================
 
