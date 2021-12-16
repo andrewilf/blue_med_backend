@@ -108,8 +108,6 @@ router.post("/sample", async (req, res) => {
     languages: ["english", "hokkien"],
     bio: "is also very good",
     pricing: 101,
-    email: "email2@email.com",
-    password: "asd12dsa212a123",
     gender: "female",
     img: "fakeurl.com",
   };
@@ -124,14 +122,45 @@ router.post("/sample", async (req, res) => {
 
 //PUT routes==================================================================================================
 
-router.put("/:doctorID", async (req, res) => {
-  //update one doctor by _id
-  const filterID = { _id: req.params.doctorID };
-  const update = req.body;
+router.put("/:doctorID/addUserID", async (req, res) => {
+  //add UserID to one doctor, must be done with this path the first time to add UserID to doctor object, normal update does not work without upsert
+  console.log("adding UserID to one doctor, find via _id");
+
   try {
+    const filterID = { _id: req.params.doctorID };
+    const addUserID = req.body.userID;
     const doctorFind = await Doctor.findOne(filterID);
     if (doctorFind !== null) {
-      console.log("found the doctor", doctorFind);
+      //found the doctor via _id
+      const doctorUpdated = await Doctor.updateOne(
+        filterID,
+        {
+          $set: { userID: addUserID },
+        },
+        { upsert: true }
+      );
+      res.send(doctorUpdated);
+    } else {
+      //if doctor not found, send 404 status
+      res.status(404).send("No doctors were found with that _id");
+    }
+  } catch (error) {
+    console.error(error);
+    //likely the doctorID was not a string of 12 bytes or a string of 24 hex characters
+    res.status(400).send("error when updating doctor, bad input");
+  }
+});
+
+router.put("/:doctorID", async (req, res) => {
+  //update one doctor by _id
+  console.log("updating one doctor, find via _id");
+
+  try {
+    const filterID = { _id: req.params.doctorID };
+    const update = req.body;
+    const doctorFind = await Doctor.findOne(filterID);
+    if (doctorFind !== null) {
+      //found the doctor via _id
       const doctorUpdated = await Doctor.updateOne(filterID, update);
       res.send(doctorUpdated);
     } else {
@@ -149,24 +178,6 @@ router.put("/:doctorID", async (req, res) => {
 
 //DELETE routes===============================================================================================
 
-router.delete("/:doctorID", async (req, res) => {
-  //delete one doctor by _id
-  const doctorID = req.params.doctorID;
-  try {
-    const doctorDelete = await Doctor.deleteOne({ _id: doctorID });
-    if (doctorDelete.deletedCount !== 0) {
-      res.send(doctorDelete);
-    } else {
-      res
-        .status(404)
-        .send("No doctors were found with that id, deletedCount: 0");
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(400).send("error when deleting doctor, bad input");
-  }
-});
-
 router.delete("/all", async (req, res) => {
   //delete all doctors, use carefully
   try {
@@ -175,6 +186,25 @@ router.delete("/all", async (req, res) => {
       res.send(doctorsDelete);
     } else {
       res.status(404).send("No doctors were found in the db, deletedCount: 0");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when deleting doctor, bad input");
+  }
+});
+
+router.delete("/:doctorID", async (req, res) => {
+  //delete one doctor by _id
+
+  try {
+    const doctorID = req.params.doctorID;
+    const doctorDelete = await Doctor.deleteOne({ _id: doctorID });
+    if (doctorDelete.deletedCount !== 0) {
+      res.send(doctorDelete);
+    } else {
+      res
+        .status(404)
+        .send("No doctors were found with that id, deletedCount: 0");
     }
   } catch (error) {
     console.error(error);
