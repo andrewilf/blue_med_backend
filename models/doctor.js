@@ -27,14 +27,9 @@ const DoctorSchema = new Schema(
       type: Number,
       required: true,
     },
-    email: {
-      //used for doctor login
-      type: String,
-      requird: true,
-    },
-    password: {
-      type: String,
-      required: true,
+    userID: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
     gender: {
       type: String,

@@ -13,15 +13,9 @@ const PatientSchema = new Schema(
       type: String,
       required: true,
     },
-    email: {
-      //used for patient login
-      type: String,
-      required: true,
-    },
-    password: {
-      //hashed password string
-      type: String,
-      required: true,
+    userID: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
     DOB: {
       //use format DD/MM/yyyy. type string as easy to parse to date format, saving as date will include timestamp
