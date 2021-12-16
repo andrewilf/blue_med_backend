@@ -122,34 +122,34 @@ router.post("/sample", async (req, res) => {
 
 //PUT routes==================================================================================================
 
-router.put("/:doctorID/addUserID", async (req, res) => {
-  //add UserID to one doctor, must be done with this path the first time to add UserID to doctor object, normal update does not work without upsert
-  console.log("adding UserID to one doctor, find via _id");
+// router.put("/:doctorID/addUserID", async (req, res) => {
+//   //add UserID to one doctor, must be done with this path the first time to add UserID to doctor object, normal update does not work without upsert
+//   console.log("adding UserID to one doctor, find via _id");
 
-  try {
-    const filterID = { _id: req.params.doctorID };
-    const addUserID = req.body.userID;
-    const doctorFind = await Doctor.findOne(filterID);
-    if (doctorFind !== null) {
-      //found the doctor via _id
-      const doctorUpdated = await Doctor.updateOne(
-        filterID,
-        {
-          $set: { userID: addUserID },
-        },
-        { upsert: true }
-      );
-      res.send(doctorUpdated);
-    } else {
-      //if doctor not found, send 404 status
-      res.status(404).send("No doctors were found with that _id");
-    }
-  } catch (error) {
-    console.error(error);
-    //likely the doctorID was not a string of 12 bytes or a string of 24 hex characters
-    res.status(400).send("error when updating doctor, bad input");
-  }
-});
+//   try {
+//     const filterID = { _id: req.params.doctorID };
+//     const addUserID = req.body.userID;
+//     const doctorFind = await Doctor.findOne(filterID);
+//     if (doctorFind !== null) {
+//       //found the doctor via _id
+//       const doctorUpdated = await Doctor.updateOne(
+//         filterID,
+//         {
+//           $set: { userID: addUserID },
+//         },
+//         { upsert: true }
+//       );
+//       res.send(doctorUpdated);
+//     } else {
+//       //if doctor not found, send 404 status
+//       res.status(404).send("No doctors were found with that _id");
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     //likely the doctorID was not a string of 12 bytes or a string of 24 hex characters
+//     res.status(400).send("error when updating doctor, bad input");
+//   }
+// });
 
 router.put("/:doctorID", async (req, res) => {
   //update one doctor by _id
