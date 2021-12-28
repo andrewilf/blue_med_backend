@@ -3,17 +3,13 @@ require("dotenv").config();
 const pastAppointment = require("../models/past_appointment");
 const router = express.Router();
 
-// router.get("/", async (req, res) => {
-//   const PatientAll = await Patient.find({});
-//   //console.log(allScientists)
-//   res.send(PatientAll);
-// });
+//get routes
 
-// router.post("/", async (req, res) => {
-//     const PatientAll = await Patient.create({
+router.get("/all", async (req, res) => {
+  const pastAppointmentAll = await pastAppointment.find({});
+  console.log(pastAppointmentAll)
+  //returns all past scheduled appointments 
+  res.send(pastAppointmentAll);
+});
 
-//     });
-//     //console.log(allScientists)
-//     res.send(PatientAll);
-//   });
 module.exports = router;
