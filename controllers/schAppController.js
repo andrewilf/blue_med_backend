@@ -49,7 +49,7 @@ router.delete ('/:appointmentID', async (req, res) => {
 
   try {
     const apptDelete = await scheduledAppointment.deleteOne({_id: appointmentID})
-    if (appDelete.deletedCount !==0) {
+    if (apptDelete.deletedCount !==0) {
       res.send(apptDelete); 
     } else {
       res
