@@ -98,6 +98,7 @@ router.get("/all", async (req, res) => {
       email: "aaa@aaa.com",
       password: "asdasd1",
       role: "patient",
+      patientID: "507f191e810c19729de860ea",
     };
     try {
       const userCreate = await User.create(sampleData);
@@ -171,4 +172,7 @@ router.get("/all", async (req, res) => {
     }
   });
   
+
+//need to make unique routes which interact with the User and Patient collection for creating and deleting users
+
 module.exports = router;
