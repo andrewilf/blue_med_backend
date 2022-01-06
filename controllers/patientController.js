@@ -3,19 +3,74 @@ require("dotenv").config();
 const Patient = require("../models/patient");
 const router = express.Router();
 
-//get all
+//GET
+//all patients
 router.get("/", async (req, res) => {
   const PatientAll = await Patient.find({});
   res.send(PatientAll);
 });
 
-//add one sample user
+//searching one patient by ID
+router.get(":/patientID", async (req, res) => {
+  try {
+    const patientID = req.params.patientID;
+    console.log("search for patient by _id");
+    const patientGetOne = await Patient.findOne({ _id: patientID });
+    if (patientGetOne !== null) {
+      res.send(patientGetOne);
+    } else {
+      res.status(404).send("patient not found");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("cant find patient, bad input");
+  }
+});
+
+//search by various fields
+router.get(":/searchField/:searchValue", async (req, res) => {
+  try {
+    const searchField = req.params.searchField;
+    const searchValue = req.params.searchValue;
+    console.log(`search by field: ${searchField}`);
+    const checkFieldExists = Object.keys(Patient.schema.tree).find(
+      (element) => element === searchField
+    );
+    const patientGet = await Patient.find({ [searchField]: searchValue });
+    if (patientGet.length !== 0 && checkFieldExists) {
+      //return response
+      res.send(patientGet);
+    } else if (!checkFieldExists) {
+      //invalid
+      res.status(400).send(`"${searchField}" is not a valid field`);
+    } else {
+      res
+        .status(404)
+        .send(`no patient records was found for the term: ${searchField}`);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("error when finding patient");
+  }
+});
+
+//POST
+//creating one patient data
+router.post("/", async (req, res) => {
+  try {
+    const patientCreate = await Patient.create(req.body);
+    res.send(patientCreate);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when adding patient, bad input");
+  }
+});
+
+//add one sample patient
 router.post("/sample", async (req, res) => {
   const addData = {
     NRIC: "S1001101",
     name: "Smith Max",
-    email: "smith@email.com",
-    password: "asdi1ninsida1",
     DOB: "11/11/1990",
     address: "10 address road",
     contactNumber: 91101101,
@@ -52,27 +107,59 @@ router.post("/sample", async (req, res) => {
     const PatientAdd = await Patient.create(addData);
     res.send(PatientAdd);
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res.status(400).send("error in executing request");
   }
 });
 
-//add one user via api
-router.post("/", async (req, res) => {
-  console.log(req.body)
+//PUT
+//Updating patient record by ID
+
+router.put("/:patientID", async (req, res) => {
+  console.log("updating patient record, find via _id");
+
   try {
-    const PatientAdd = await Patient.create(req.body);
-    res.send(PatientAdd);
+    const filterID = { _id: req.params.patientID };
+    const update = req.body;
+    const patientFind = await Patient.findOne(filterID);
+    if (patientFind !== null) {
+      //patient record located via _id
+      const patientUpdated = await Patient.updateOne(filterID, update);
+      res.send(patientUpdated);
+    } else {
+      //record not found
+      res.status(404).send("No patient records were found with that _id");
+    }
   } catch (error) {
-    console.error(error)
-    res.status(400).send("error in executing request");
+    console.error(error);
+    res.send(400).send("failed to update, bad input");
   }
 });
 
-//delete all, use carefully
+//DELETE
+
+//delete all patient records
 router.delete("/all", async (req, res) => {
   const PatientDeleted = await Patient.deleteMany({});
   res.send(PatientDeleted);
+});
+
+//delete patient by ID
+router.delete("/:patientID", async (req, res) => {
+  try {
+    const patientID = req.params.patientID;
+    const patientDelete = await Patient.deleteOne({ _id: patientID });
+    if (patientDelete.deletedCount !== 0) {
+      res.send(patientDelete);
+    } else {
+      res
+        .status(404)
+        .send("no patients were found with that id, deletedCount: 0");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("delete failed, bad input");
+  }
 });
 
 module.exports = router;
