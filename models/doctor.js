@@ -9,7 +9,7 @@ const DoctorSchema = new Schema(
     },
     profession: {
       type: String,
-      requird: true,
+      required: true,
     },
     languages: [
       //spoken languages
