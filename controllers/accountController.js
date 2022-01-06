@@ -6,10 +6,10 @@ const router = express.Router();
 
 //A unique controller that manipulates the user and corresponding patient objects in the database which are tightly linked. 
 //Is for streamlining creating and deleting accounts for customers using the platforms, allows the frontend to just to 1 API call instead of the multiple which would be required thus saving time
-//when referring to customer, this means we are talking about both the user and corresponding patient object.
+//when referring to account, this means we are talking about both the user and corresponding patient object.
 //POST routes==================================================================================================
 
-//add one customer via api
+//add one account via api
 router.post("/", async (req, res) => {
     console.log(req.body.NRIC)
     const patientBody = {
@@ -39,8 +39,9 @@ router.post("/", async (req, res) => {
     
      //if no issues, link patient object id to user and link user object id to patient
 
-   
 
    });
 
 //DELETE routes==================================================================================================
+
+   //may not be required, just commenting in case
