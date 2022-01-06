@@ -27,12 +27,14 @@ const doctorController = require("./controllers/doctorController");
 const scheduledAppointmentController = require("./controllers/schAppController");
 const pastAppointmentController = require("./controllers/pastAppController");
 const userController = require("./controllers/userController");
+const accountController = require("./controllers/accountController");
 
 app.use("/patient", patientController);
 app.use("/doctor", doctorController);
 app.use("/schapp", scheduledAppointmentController);
 app.use("/pastapp", pastAppointmentController);
 app.use("/user", userController);
+app.use("/account", accountController);
 
 mongoose.connect(MONGO_URL).then(async () => {
   console.log("database connected");
