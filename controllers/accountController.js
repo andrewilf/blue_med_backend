@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
   console.log(req.body.NRIC);
   const patientBody = {
     NRIC: req.body.NRIC,
-    name: body.name,
+    name: req.body.name,
     DOB: req.body.DOB,
     address: req.body.address,
     contactNumber: req.body.contactNumber,
@@ -35,35 +35,41 @@ router.post("/", async (req, res) => {
     const userCreate = await User.create(userBody);
     const newUserID = userCreate._id;
     //res.send(userCreate);
+    try {
+      const patientCreate = await Patient.create(req.body);
+      const newPatientID = patientCreate._id;
+      //res.send(patientCreate);
+      try {
+        //if no issues, link patient object id to user and link user object id to patient
+        await User.updateOne({ _id: newUserID }, { patientID: newPatientID });
+        await Patient.updateOne({ _id: newPatientID },{ userID: newUserID });
+        res.send({
+          userCreate,
+          patientCreate,
+        });
+      } catch (error) {
+        console.error(error);
+        await User.deleteOne({ _id: newUserID });
+        await Patient.deleteOne({ _id: newPatientID });
+        res.status(400).send("error when assigning object id");
+      }
+    } catch (error) {
+      //if any issues with patient found, delete the user object from the db and report an error
+      await User.deleteOne({ _id: newUserID });
+      console.error(error);
+      res
+        .status(400)
+        .send("error when creating patient, bad input. User deleted");
+    }
   } catch (error) {
     console.error(error);
     res.status(400).send("error when creating user, bad input");
   }
   //if no issues, create patient object on db
-  try {
-    const patientCreate = await Patient.create(req.body);
-    const newPatientID = patientCreate._id;
-    //res.send(patientCreate);
-  } catch (error) {
-    //if any issues with patient found, delete the user object from the db and report an error
-    await User.deleteOne({ _id: newUserID });
-    console.error(error);
-    res
-      .status(400)
-      .send("error when creating patient, bad input. User deleted");
-  }
-  try {
-    //if no issues, link patient object id to user and link user object id to patient
-    await User.updateOne({ _id: newUserID }, { patientID: newPatientID });
-    await Patient.updateOne({ _id: newPatientID }, { patientID: newUserID });
-  } catch (error) {
-    console.error(error);
-    await User.deleteOne({ _id: newUserID });
-    await Patient.deleteOne({ _id: newPatientID });
-    res.status(400).send("error when assigning object id");
-  }
 });
 
 //DELETE routes==================================================================================================
 
 //may not be required, just commenting in case
+
+module.exports = router;

@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
 });
 
 //searching one patient by ID
-router.get(":/patientID", async (req, res) => {
+router.get("/:patientID", async (req, res) => {
   try {
     const patientID = req.params.patientID;
     console.log("search for patient by _id");
@@ -28,7 +28,7 @@ router.get(":/patientID", async (req, res) => {
 });
 
 //search by various fields
-router.get(":/searchField/:searchValue", async (req, res) => {
+router.get("/:searchField/:searchValue", async (req, res) => {
   try {
     const searchField = req.params.searchField;
     const searchValue = req.params.searchValue;
