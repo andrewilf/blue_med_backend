@@ -17,11 +17,6 @@ const router = express.Router();
 //     res.send(PatientAll);
 //   });
 
-const express = require("express");
-require("dotenv").config();
-const pastAppointment = require("../models/past_appointment");
-const router = express.Router();
-
 //POST 
 //create a pastAppointment
 router.post('/', async (req, res) => {
