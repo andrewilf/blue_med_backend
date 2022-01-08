@@ -3,7 +3,7 @@ require("dotenv").config();
 const Patient = require("../models/patient");
 const User = require("../models/user");
 const router = express.Router();
-
+const bcrypt= require('bcryptjs')
 //A unique controller that manipulates the user and corresponding patient objects in the database which are tightly linked.
 //Is for streamlining creating and deleting accounts for customers using the platforms, allows the frontend to just to 1 API call instead of the multiple which would be required thus saving time
 //when referring to account, this means we are talking about both the user and corresponding patient object.
@@ -11,7 +11,9 @@ const router = express.Router();
 
 //add one account via api
 router.post("/", async (req, res) => {
+  const hash=await bcrypt.hash(req.body.password,10)
   console.log(req.body.NRIC);
+  //console.log(hash)
   const patientBody = {
     NRIC: req.body.NRIC,
     name: req.body.name,
@@ -26,7 +28,7 @@ router.post("/", async (req, res) => {
   };
   const userBody = {
     email: req.body.email,
-    password: req.body.password,
+    password: hash,
     role: "user",
   };
   console.log(patientBody, userBody);

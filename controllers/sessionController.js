@@ -1,29 +1,29 @@
 const express = require("express");
 require("dotenv").config();
-const Session = require("../models/session");
 const User = require("../models/user");
 const router = express.Router();
-//const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 //POST routes=================================================================================================
 
 router.post("/", async (req, res) => {
   try {
+    console.log("starting")
     const userEmail = req.body.email;
     const userPassword = req.body.password;
     const userAccountSearch = await User.find({ email: userEmail });
-    const userAccount = userAccountSearch[0]
-    console.log(userAccount)
-    if (userAccount.length === 0) {
+    if (userAccountSearch.length === 0) {
       console.log("email does not exist");
       res.status(400).send("error logging into account");
+      
     } else if (
-      //!bcrypt.compareSync(userPassword, userAccount.password)
-      userPassword !== userAccount.password
+      !bcrypt.compareSync(userPassword, userAccountSearch[0].password)
+      //userPassword !== userAccount.password
       ) {
       console.log("password incorrect");
       res.status(400).send("error logging into account");
     } else {
+      const userAccount = userAccountSearch[0]
       console.log("login successful, creating session");
       req.session.currentUser = userAccount;
       console.log("current user:", req.session.currentUser )
