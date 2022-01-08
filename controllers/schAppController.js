@@ -5,7 +5,7 @@ const router = express.Router();
 
 //GET 
 //all scheduled appointments 
-router.get('/', async (req, res) => {
+router.get('/all', async (req, res) => {
     const schAppAll = await scheduledAppointment.find({});
     res.send(schAppAll)
 }); 
