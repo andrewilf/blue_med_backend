@@ -3,7 +3,7 @@ require("dotenv").config();
 const Session = require("../models/session");
 const User = require("../models/user");
 const router = express.Router();
-
+//const bcrypt = require("bcrypt");
 ///GET routes==================================================================================================
 
 router.get("/all", async (req, res) => {
@@ -38,19 +38,27 @@ router.get("/:sessionID", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     //create one session, in other words login
+    console.log("current user:", req.session.currentUser )
     const userEmail = req.body.email;
     const userPassword = req.body.password;
-    const userAccount = await User.findOne({ email: userEmail });
+    const userAccountSearch = await User.find({ email: userEmail });
+    const userAccount = userAccountSearch[0]
+    console.log(userAccount)
     if (userAccount.length === 0) {
       console.log("email does not exist");
       res.status(400).send("error logging into account");
-    } else if (userPassword !== userAccount.password) {
+    } else if (
+      //!bcrypt.compareSync(userPassword, userAccount.password)
+      userPassword !== userAccount.password
+      ) {
       console.log("password incorrect");
       res.status(400).send("error logging into account");
     } else {
       console.log("login successful, creating session");
-      const sessionCreate = await Session.create({ userID: userAccount._id });
-      res.send(sessionCreate);
+      //const sessionCreate = await Session.create({ userID: userAccount._id });
+      req.session.currentUser = userAccount;
+      console.log("current user:", req.session.currentUser )
+      res.send("login success");
     }
   } catch (error) {
     console.error(error);
