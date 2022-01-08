@@ -3,9 +3,24 @@ require("dotenv").config();
 const Patient = require("../models/patient");
 const router = express.Router();
 
+const isAuthenticated = (req, res, next) => {
+  if (req.session.currentUser) {
+    return next();
+  } else {
+    res.status(401).send("Not logged in");
+  }
+};
+const isAdmin = (req, res, next) => {
+  if (req.session.currentUser.role  === "admin") {
+    return next();
+  } else {
+    res.status(401).send("Not admin");
+  }
+};
+
 //GET
 //all patients
-router.get("/all", async (req, res) => {
+router.get("/all", [isAuthenticated, isAdmin], async (req, res) => {
   const PatientAll = await Patient.find({});
   res.send(PatientAll);
 });
