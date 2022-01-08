@@ -5,7 +5,7 @@ const router = express.Router();
 
 //GET
 //all patients
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   const PatientAll = await Patient.find({});
   res.send(PatientAll);
 });
