@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const pastAppointment = require("../models/past_appointment");
+const User = require('../models/user')
 const router = express.Router();
 
 //POST 
@@ -37,6 +38,22 @@ router.get('/:appID', async (req, res) => {
     }
   } catch (error) {
     console.error(error); 
+    res.status(500).send('error occured when finding appointment')
+  }
+})
+
+router.get('/patients/:patientID', async (req, res) => {
+  try {
+    const patientID = req.params.patient; 
+    console.log('search for schedule by userID'); 
+    const getApp = await pastAppointment.findOne({_id: patientID});
+    if (getApp != null) {
+      res.send(getApp);
+    } else {
+      res.status(404).send('past appointment not found'); 
+    }
+  } catch (err) {
+    console.error(err); 
     res.status(500).send('error occured when finding appointment')
   }
 })
