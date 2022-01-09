@@ -3,6 +3,7 @@ require("dotenv").config();
 const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
+const session = require("express-session");
 const CORS_WHITELIST = process.env.CORS_WHITELIST.split(",");
 
 const db = mongoose.connection;
@@ -20,6 +21,13 @@ app.use(
     //{origin: CORS_WHITELIST,}
     )
 );
+app.use(
+  session({
+    secret: process.env.SECRET, //a random string do not copy this value or your stuff will get hacked
+    resave: false, // default more info: https://www.npmjs.com/package/express-session#resave
+    saveUninitialized: false, // default  more info: https://www.npmjs.com/package/express-session#resave
+  })
+);
 //--------------------------------------------controllers--------------------------------------------
 
 const patientController = require("./controllers/patientController");
@@ -28,6 +36,7 @@ const scheduledAppointmentController = require("./controllers/schAppController")
 const pastAppointmentController = require("./controllers/pastAppController");
 const userController = require("./controllers/userController");
 const accountController = require("./controllers/accountController");
+const sessionController = require("./controllers/sessionController");
 
 app.use("/patient", patientController);
 app.use("/doctor", doctorController);
@@ -35,6 +44,7 @@ app.use("/schapp", scheduledAppointmentController);
 app.use("/pastapp", pastAppointmentController);
 app.use("/user", userController);
 app.use("/account", accountController);
+app.use("/session", sessionController);
 
 mongoose.connect(MONGO_URL).then(async () => {
   console.log("database connected");

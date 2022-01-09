@@ -5,9 +5,9 @@ const router = express.Router();
 
 //GET 
 //all scheduled appointments 
-router.get('/', async (req, res) => {
-    const schAppAll = await scheduledAppointment.find({});
-    res.send(schAppAll)
+router.get('/all', async (req, res) => {
+const schAppAll = await scheduledAppointment.find({});
+res.send(schAppAll)
 }); 
 
 //search for one scheduled appt by ID 
