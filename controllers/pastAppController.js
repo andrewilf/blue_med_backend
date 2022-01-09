@@ -42,6 +42,8 @@ router.get('/:appID', async (req, res) => {
   }
 })
 
+// get past appointment by patient ID
+
 router.get('/patients/:patientID', async (req, res) => {
   try {
     const patientID = req.params.patient; 
