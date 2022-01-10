@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
     console.log("starting")
     const userEmail = req.body.email;
     const userPassword = req.body.password;
-    const userAccountSearch = await User.find({ email: userEmail }).populate('patientID').populate('DoctorID');
+    const userAccountSearch = await User.find({ email: userEmail });
     if (userAccountSearch.length === 0) {
       console.log("email does not exist");
       res.status(400).send("error logging into account");
