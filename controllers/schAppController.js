@@ -27,8 +27,25 @@ router.get('/:schAppID', async (req, res) => {
     }
 })
 
+//search for one scheduled appt by ID and populated
+router.get('/populated/:schAppID', async (req, res) => {
+    try {
+        const schAppID = req.params.schAppID; 
+        console.log('search for scheduled appt by _id'); 
+        const schAppGetOne = await scheduledAppointment.findOne({ _id: schAppID }).populate('doctor').populate('patient');
+        if (schAppGetOne !== null) {
+            res.send(schAppGetOne); 
+        } else {
+            res.send(404).end('appointment not found')
+        }
+    } catch (error) {
+        console.error(error); 
+        res.status(500).send("can't locate appointment, bad input")
+    }
+})
+
 //search by fields
-router.get(":/searchFieldId/:searchValue", async (req, res) => {
+router.get(":/searchField/:searchValue", async (req, res) => {
     try {
         const searchField = req.params.searchField; 
         const searchValue = req.params.searchValue; 
