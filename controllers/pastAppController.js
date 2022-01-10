@@ -65,7 +65,7 @@ router.get('/patients/:patientID', async (req, res) => {
   try {
     const patientID = req.params.patient; 
     console.log('search for schedule by userID'); 
-    const getApp = await pastAppointment.findOne({_id: patientID});
+    const getApp = await pastAppointment.find({_id: patientID});
     if (getApp != null) {
       res.send(getApp);
     } else {
