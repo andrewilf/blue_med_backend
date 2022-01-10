@@ -42,6 +42,23 @@ router.get("/:patientID", async (req, res) => {
   }
 });
 
+//searching one patient by ID, with populated field
+router.get("/populated/:patientID", async (req, res) => {
+  try {
+    const patientID = req.params.patientID;
+    console.log("search for patient by _id");
+    const patientGetOne = await Patient.findOne({ _id: patientID }).populate('userID');
+    if (patientGetOne !== null) {
+      res.send(patientGetOne);
+    } else {
+      res.status(404).send("patient not found");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("cant find patient, bad input");
+  }
+});
+
 //search by various fields
 router.get("/:searchField/:searchValue", async (req, res) => {
   try {

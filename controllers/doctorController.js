@@ -50,6 +50,26 @@ router.get("/:doctorID", async (req, res) => {
   }
 });
 
+router.get("/populated/:doctorID", async (req, res) => {
+  //searc for one doctor by _id and populate
+  try {
+    const doctorID = req.params.doctorID;
+    console.log("search for doctor by _id");
+    const doctorGetOne = await Doctor.findOne({ _id: doctorID }).populate("userID");
+    if (doctorGetOne !== null) {
+      //returns one object
+      res.send(doctorGetOne);
+    } else {
+      //_id was of the correct format but no doctor was found
+      res.status(404).send("doctor not found");
+    }
+  } catch (error) {
+    //likely the doctorID was not a string of 12 bytes or a string of 24 hex characters
+    console.error(error);
+    res.status(400).send("error when finding doctor, bad input");
+  }
+});
+
 router.get("/:searchField/:searchValue", async (req, res) => {
   //search multiple doctors by defined field
   try {

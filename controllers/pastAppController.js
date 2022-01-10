@@ -42,6 +42,23 @@ router.get('/:appID', async (req, res) => {
   }
 })
 
+//getting specific past appointment by ID and populated
+router.get('/populated/:appID', async (req, res) => {
+  try {
+    const appID = req.params.appID; 
+    console.log('searched for schedule by ID'); 
+    const getApp = await pastAppointment.findOne({_id: appID}).populate('doctor').populate('patient'); 
+    if (getApp != null) {
+      res.send(getApp);
+    } else {
+      res.status(404).send('past appointment not found'); 
+    }
+  } catch (error) {
+    console.error(error); 
+    res.status(500).send('error occured when finding appointment')
+  }
+})
+
 // get past appointment by patient ID
 
 router.get('/patients/:patientID', async (req, res) => {
