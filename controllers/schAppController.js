@@ -27,6 +27,23 @@ router.get('/:schAppID', async (req, res) => {
     }
 })
 
+// get sch appointment by patient ID
+router.get('/patients/:patientID', async (req, res) => {
+    try {
+      const patientID = req.params.patientID
+      console.log('search for schedule by userID'); 
+      const getApp = await scheduledAppointment.find({patient: patientID}).populate('doctor').populate('patient');
+      if (getApp != null) {
+        res.send(getApp);
+      } else {
+        res.status(404).send('scheduled appointment not found'); 
+      }
+    } catch (err) {
+      console.error(err); 
+      res.status(500).send('error occured when finding appointment')
+    }
+  })
+
 //search for one scheduled appt by ID and populated
 router.get('/populated/:schAppID', async (req, res) => {
     try {
