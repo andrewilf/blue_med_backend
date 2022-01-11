@@ -30,7 +30,7 @@ router.get('/:schAppID', async (req, res) => {
 // get sch appointment by patient ID
 router.get('/patients/:patientID', async (req, res) => {
     try {
-      const patientID = req.params.patient; 
+      const patientID = req.params.patientID
       console.log('search for schedule by userID'); 
       const getApp = await scheduledAppointment.find({patient: patientID}).populate('doctor').populate('patient');
       if (getApp != null) {
