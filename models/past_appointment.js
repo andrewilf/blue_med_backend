@@ -14,6 +14,10 @@ const PastAppSchema = new Schema(
       //optional field. if appointment is for a dependent, their NRIC number is here, if not field is blank
       type: String,
     },
+    attendee: {
+      type: String,
+      required: true,
+    },
     doctor: {
       //doctor _id from doctor collection
       type: Schema.Types.ObjectId,
