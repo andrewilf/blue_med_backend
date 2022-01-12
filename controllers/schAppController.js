@@ -11,6 +11,15 @@ router.get("/all", async (req, res) => {
   res.send(schAppAll);
 });
 
+//all scheduled appointments and populated
+router.get("/populated/all", async (req, res) => {
+  const schAppAll = await scheduledAppointment
+    .find({})
+    .populate("doctor")
+    .populate("patient");
+  res.send(schAppAll);
+});
+
 //search for one scheduled appt by ID
 router.get("/:schAppID", async (req, res) => {
   try {
@@ -139,19 +148,23 @@ router.post("/promote/:schAppID", async (req, res) => {
       try {
         const schAppCreate = await pastAppointment.create(payload);
         if (schAppCreate !== null) {
-            try {
-                const schAppDel = await scheduledAppointment.deleteOne({ _id: schAppID });
-                if (schAppDel.deletedCount !== 0) {
-                    res.send(schAppCreate);
-                } else {
-                  res
-                    .status(404)
-                    .send("Failed to delete: no appointments were found with that id");
-                }
-              } catch (err) {
-                console.error(err);
-                res.status(400).send("failed to delete, bad input");
-              }
+          try {
+            const schAppDel = await scheduledAppointment.deleteOne({
+              _id: schAppID,
+            });
+            if (schAppDel.deletedCount !== 0) {
+              res.send(schAppCreate);
+            } else {
+              res
+                .status(404)
+                .send(
+                  "Failed to delete: no appointments were found with that id"
+                );
+            }
+          } catch (err) {
+            console.error(err);
+            res.status(400).send("failed to delete, bad input");
+          }
         }
       } catch (err) {
         console.error(err);
