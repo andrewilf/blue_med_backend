@@ -120,8 +120,9 @@ router.put("/:appID", async (req, res) => {
 //deleting one pastAppointment
 router.delete("/:pastAppID", async (req, res) => {
   try {
-    const pastAppID = req.params.appID;
+    const pastAppID = req.params.pastAppID;
     const pastAppDel = await pastAppointment.deleteOne({ _id: pastAppID });
+    //console.log(pastAppDel, pastAppID)
     if (pastAppDel.deletedCount !== 0) {
       res.send(pastAppDel);
     } else {
