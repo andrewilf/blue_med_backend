@@ -2,6 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const scheduledAppointment = require("../models/scheduled_appointment");
 const pastAppointment = require("../models/past_appointment");
+const doctor = require("../models/doctor");
 const router = express.Router();
 
 //GET
@@ -119,6 +120,7 @@ router.post("/", async (req, res) => {
 //make one scheduled appointment become a past appointment. If successful, the scheduled appointment gets deleted
 router.post("/promote/:schAppID", async (req, res) => {
   let schAppGetOne;
+  let doctorPrice;
   const schAppID = req.params.schAppID;
   try {
     console.log("search for scheduled appt by _id");
@@ -130,6 +132,8 @@ router.post("/promote/:schAppID", async (req, res) => {
           "scheduled appointment not found, cannot promote to past appointment"
         );
     } else {
+      doctorPrice = await doctor.findOne({ doctor: schAppGetOne.doctor });
+      console.log(doctorPrice.pricing)
       console.log(schAppGetOne);
       const payload = {
         patient: schAppGetOne.patient,
@@ -140,7 +144,7 @@ router.post("/promote/:schAppID", async (req, res) => {
         patientNotes: schAppGetOne.patientNotes,
         doctorNotes: req.body.doctorNotes,
         appTime: schAppGetOne.appTime,
-        cost: 160,
+        cost: doctorPrice.pricing,
         paid: false,
         medicationDelivery: "pending",
         altDeliveryAddress: req.body.altDeliveryAddress,
