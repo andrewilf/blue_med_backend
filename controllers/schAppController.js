@@ -146,7 +146,7 @@ router.post("/promote/:schAppID", async (req, res) => {
         appTime: schAppGetOne.appTime,
         cost: doctorPrice.pricing,
         paid: false,
-        medicationDelivery: "pending",
+        medicationDelivery: "Confirmed and delivered",
         altDeliveryAddress: req.body.altDeliveryAddress,
       };
       try {
