@@ -24,6 +24,10 @@ For more details on the general project, view the readme file on frontend's gith
 - Mongoose/MongoDB
 - Node.js
 
+## Running the server locally
+If you wish to clone and run this server on your local machine:
+- you need to configure some config variables. The npm library, dotenv is included in the package.json file so you can edit the included file "dotenv"(remember to rename it .env) and write your own API details which the app will use.
+- Run the following commands inside your BLUE_MED_BACKEND folder: npm install, npm start.
 
 ## Contributors
 - Andrew @andrewilf

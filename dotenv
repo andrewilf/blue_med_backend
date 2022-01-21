@@ -1,0 +1,7 @@
+PORT=<port number of server>
+DATABASE=<database name>
+MONGO_USER=<mongodb username>
+MONGO_PASSWORD=<mongodb password>
+MONGO_BASE_URL=<mongodb url>
+CORS_WHITELIST=<CORS url whitelist>
+SECRET=<secret string for express session>
